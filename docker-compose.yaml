@@ -82,14 +82,14 @@ services:
       - project_network
     depends_on:
       - kafka
+      - cassandra
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-    volumes:
-      - ./shared-workspace:/opt/workspace
+
 
 
   spark-worker-1:
@@ -100,14 +100,12 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=4g
-      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=2g
+      - SPARK_WORKER_CORES=2
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-    volumes:
-      - ./shared-workspace:/opt/workspace
     depends_on:
       - spark-master
 
@@ -119,14 +117,12 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=4g
-      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=2g
+      - SPARK_WORKER_CORES=2
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-    volumes:
-      - ./shared-workspace:/opt/workspace
     depends_on:
       - spark-master
 
@@ -138,14 +134,13 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=4g
-      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=2g
+      - SPARK_WORKER_CORES=2
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-    volumes:
-      - ./shared-workspace:/opt/workspace
+
     depends_on:
       - spark-master
 
@@ -157,17 +152,32 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=4g
-      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=2g
+      - SPARK_WORKER_CORES=2
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-    volumes:
-      - ./shared-workspace:/opt/workspace
     depends_on:
       - spark-master
 
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"  # CQL port
+      - "7009:7009"  # Internode communication (within cluster)
+    environment:
+      - CASSANDRA_CLUSTER_NAME=Cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+    networks:
+      - project_network
+
+volumes:
+    cassandra_data:
+      driver: local
 
 networks:
   project_network:

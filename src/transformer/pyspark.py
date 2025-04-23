@@ -1,7 +1,7 @@
 import findspark
 findspark.init()
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, from_json, explode, count
+from pyspark.sql.functions import col, from_json, explode
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType, LongType, ArrayType
 import logging
 import os
@@ -120,27 +120,7 @@ def process_streaming_data(spark, config):
                          .start())
         logger.info("Started console streaming query")
 
-        # # Write to Parquet files
-        # file_query = (exploded_df
-        #               .writeStream
-        #               .outputMode("append")
-        #               .format("parquet")
-        #               .option("path", config['output_path'])
-        #               .option("checkpointLocation", config['checkpoint_location'])
-        #               .partitionBy("message_type")
-        #               .start())
-        # logger.info(f"Started Parquet file streaming query at {config['output_path']}")
-
-        # Aggregate metrics (e.g., count of records per batch)
-        metrics_df = exploded_df.groupBy().agg(count("*").alias("record_count"))
-        metrics_query = (metrics_df
-                         .writeStream
-                         .outputMode("complete")
-                         .format("console")
-                         .start())
-        logger.info("Started metrics streaming query")
-
-        return [console_query, metrics_query]
+        return [console_query]  # Return list of queries
 
     except (AnalysisException, ParseException) as e:
         logger.error(f"Error processing streaming data: {str(e)}")
@@ -151,6 +131,8 @@ def process_streaming_data(spark, config):
 
 def main():
     """Main function to run the streaming job."""
+    spark = None
+    queries = []
     try:
         # Load configuration
         config = load_config()
@@ -170,8 +152,15 @@ def main():
     except Exception as e:
         logger.error(f"Application failed: {str(e)}")
         sys.exit(1)
-
+    finally:
+        # Clean up
+        for query in queries:
+            if query.isActive:
+                query.stop()
+                logger.info("Stopped streaming query")
+        if spark:
+            spark.stop()
+            logger.info("Spark session stopped")
 
 if __name__ == "__main__":
-    queries = []  # To store active queries for cleanup
     main()
