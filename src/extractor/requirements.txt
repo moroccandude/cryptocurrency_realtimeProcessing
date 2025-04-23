@@ -1,0 +1,3 @@
+websocket-client
+dotenv
+confluent-kafka
