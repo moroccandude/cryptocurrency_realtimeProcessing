@@ -1,0 +1,509 @@
+2025-04-24 09:36:22,026 [INFO] Loaded configuration from .env file
+2025-04-24 09:36:22,026 [INFO] Creating Cassandra schema
+2025-04-24 09:36:22,029 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 09:36:22,031 [WARNING] Downgrading core protocol version from 66 to 65 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 09:36:22,032 [WARNING] Downgrading core protocol version from 65 to 5 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 09:36:22,036 [INFO] Using datacenter 'dc1' for DCAwareRoundRobinPolicy (via host '192.168.32.2:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-04-24 09:36:22,057 [INFO] Connected to Cassandra cluster at cassandra:9042
+2025-04-24 09:36:22,092 [WARNING] Server warning: Your replication factor 5 for keyspace crypto_namespace is higher than the number of nodes 1
+2025-04-24 09:36:22,097 [INFO] Keyspace 'crypto_namespace' is ready ===============
+2025-04-24 09:36:22,254 [INFO] Table 'trades' ready ===========================
+2025-04-24 09:36:22,292 [INFO] Cassandra session closed
+2025-04-24 09:36:22,293 [INFO] Cassandra schema setup completed
+2025-04-24 09:36:27,641 [INFO] Spark session initialized successfully
+2025-04-24 09:36:31,691 [INFO] Connected to Kafka topic: cryptocurrency
+2025-04-24 09:36:36,918 [INFO] Started Cassandra streaming query
+2025-04-24 09:37:10,299 [ERROR] Application failed: [STREAM_FAILED] Query [id = c48131cb-5588-49e4-9b54-a53edf6a22e7, runId = b745a596-6cf2-4695-9027-aed5f9aae58c] terminated with exception: Job aborted due to stage failure: Task 0 in stage 0.0 failed 4 times, most recent failure: Lost task 0.3 in stage 0.0 (TID 3) (192.168.32.10 executor 0): java.io.IOException: Failed to write statements to crypto_namespace.trades. The
+latest exception was
+  Not enough replicas available for query at consistency LOCAL_QUORUM (3 required but only 1 alive)
+
+Please check the executor logs for more exceptions and information
+             
+	at com.datastax.spark.connector.writer.AsyncStatementWriter.$anonfun$close$2(TableWriter.scala:282)
+	at scala.Option.map(Option.scala:230)
+	at com.datastax.spark.connector.writer.AsyncStatementWriter.close(TableWriter.scala:277)
+	at com.datastax.spark.connector.datasource.CassandraDriverDataWriter.commit(CasssandraDriverDataWriterFactory.scala:46)
+	at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.$anonfun$run$5(WriteToDataSourceV2Exec.scala:464)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1397)
+	at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.run(WriteToDataSourceV2Exec.scala:491)
+	at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.run$(WriteToDataSourceV2Exec.scala:430)
+	at org.apache.spark.sql.execution.datasources.v2.DataWritingSparkTask$.run(WriteToDataSourceV2Exec.scala:496)
+	at org.apache.spark.sql.execution.datasources.v2.V2TableWriteExec.$anonfun$writeWithV2$2(WriteToDataSourceV2Exec.scala:393)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:620)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:623)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+	Suppressed: java.io.IOException: Failed to write statements to crypto_namespace.trades. The
+latest exception was
+  Not enough replicas available for query at consistency LOCAL_QUORUM (3 required but only 1 alive)
+
+Please check the executor logs for more exceptions and information
+             
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.$anonfun$close$2(TableWriter.scala:282)
+		at scala.Option.map(Option.scala:230)
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.close(TableWriter.scala:277)
+		at com.datastax.spark.connector.datasource.CassandraDriverDataWriter.abort(CasssandraDriverDataWriterFactory.scala:51)
+		at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.$anonfun$run$10(WriteToDataSourceV2Exec.scala:487)
+		at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1408)
+		... 15 more
+	Suppressed: java.io.IOException: Failed to write statements to crypto_namespace.trades. The
+latest exception was
+  Not enough replicas available for query at consistency LOCAL_QUORUM (3 required but only 1 alive)
+
+Please check the executor logs for more exceptions and information
+             
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.$anonfun$close$2(TableWriter.scala:282)
+		at scala.Option.map(Option.scala:230)
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.close(TableWriter.scala:277)
+		at com.datastax.spark.connector.datasource.CassandraDriverDataWriter.close(CasssandraDriverDataWriterFactory.scala:56)
+		at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.$anonfun$run$13(WriteToDataSourceV2Exec.scala:491)
+		at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1419)
+		... 15 more
+
+Driver stacktrace:
+2025-04-24 09:37:10,305 [INFO] Closing down clientserver connection
+2025-04-24 10:22:02,914 [INFO] Loaded configuration from .env file
+2025-04-24 10:22:02,914 [INFO] Creating Cassandra schema
+2025-04-24 10:22:02,918 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 10:22:02,922 [WARNING] Downgrading core protocol version from 66 to 65 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 10:22:02,923 [WARNING] Downgrading core protocol version from 65 to 5 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 10:22:02,926 [INFO] Using datacenter 'dc1' for DCAwareRoundRobinPolicy (via host '192.168.32.2:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-04-24 10:22:02,949 [INFO] Connected to Cassandra cluster at cassandra:9042
+2025-04-24 10:22:02,951 [INFO] Keyspace 'crypto_namespace' is ready ===============
+2025-04-24 10:22:02,953 [INFO] Table 'trades' ready ===========================
+2025-04-24 10:22:02,953 [INFO] Cassandra session closed
+2025-04-24 10:22:02,954 [INFO] Cassandra schema setup completed
+2025-04-24 10:22:08,496 [INFO] Spark session initialized successfully
+2025-04-24 10:22:12,190 [INFO] Connected to Kafka topic: cryptocurrency
+2025-04-24 10:22:15,702 [INFO] Started Cassandra streaming query
+2025-04-24 10:22:44,478 [ERROR] Application failed: [STREAM_FAILED] Query [id = c48131cb-5588-49e4-9b54-a53edf6a22e7, runId = 6fd4e5cc-341a-4993-98ba-101d8841c381] terminated with exception: Job aborted due to stage failure: Task 0 in stage 0.0 failed 4 times, most recent failure: Lost task 0.3 in stage 0.0 (TID 3) (192.168.32.10 executor 0): java.io.IOException: Failed to write statements to crypto_namespace.trades. The
+latest exception was
+  Not enough replicas available for query at consistency LOCAL_QUORUM (3 required but only 1 alive)
+
+Please check the executor logs for more exceptions and information
+             
+	at com.datastax.spark.connector.writer.AsyncStatementWriter.$anonfun$close$2(TableWriter.scala:282)
+	at scala.Option.map(Option.scala:230)
+	at com.datastax.spark.connector.writer.AsyncStatementWriter.close(TableWriter.scala:277)
+	at com.datastax.spark.connector.datasource.CassandraDriverDataWriter.commit(CasssandraDriverDataWriterFactory.scala:46)
+	at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.$anonfun$run$5(WriteToDataSourceV2Exec.scala:464)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1397)
+	at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.run(WriteToDataSourceV2Exec.scala:491)
+	at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.run$(WriteToDataSourceV2Exec.scala:430)
+	at org.apache.spark.sql.execution.datasources.v2.DataWritingSparkTask$.run(WriteToDataSourceV2Exec.scala:496)
+	at org.apache.spark.sql.execution.datasources.v2.V2TableWriteExec.$anonfun$writeWithV2$2(WriteToDataSourceV2Exec.scala:393)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:620)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:623)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+	Suppressed: java.io.IOException: Failed to write statements to crypto_namespace.trades. The
+latest exception was
+  Not enough replicas available for query at consistency LOCAL_QUORUM (3 required but only 1 alive)
+
+Please check the executor logs for more exceptions and information
+             
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.$anonfun$close$2(TableWriter.scala:282)
+		at scala.Option.map(Option.scala:230)
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.close(TableWriter.scala:277)
+		at com.datastax.spark.connector.datasource.CassandraDriverDataWriter.abort(CasssandraDriverDataWriterFactory.scala:51)
+		at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.$anonfun$run$10(WriteToDataSourceV2Exec.scala:487)
+		at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1408)
+		... 15 more
+	Suppressed: java.io.IOException: Failed to write statements to crypto_namespace.trades. The
+latest exception was
+  Not enough replicas available for query at consistency LOCAL_QUORUM (3 required but only 1 alive)
+
+Please check the executor logs for more exceptions and information
+             
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.$anonfun$close$2(TableWriter.scala:282)
+		at scala.Option.map(Option.scala:230)
+		at com.datastax.spark.connector.writer.AsyncStatementWriter.close(TableWriter.scala:277)
+		at com.datastax.spark.connector.datasource.CassandraDriverDataWriter.close(CasssandraDriverDataWriterFactory.scala:56)
+		at org.apache.spark.sql.execution.datasources.v2.WritingSparkTask.$anonfun$run$13(WriteToDataSourceV2Exec.scala:491)
+		at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1419)
+		... 15 more
+
+Driver stacktrace:
+2025-04-24 10:22:44,482 [INFO] Closing down clientserver connection
+2025-04-24 12:30:51,666 [INFO] Loaded configuration from .env file
+2025-04-24 12:30:51,667 [INFO] Creating Cassandra schema
+2025-04-24 12:30:51,670 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 12:30:51,671 [WARNING] [control connection] Error connecting to 192.168.32.2:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/opt/bitnami/python/lib/python3.12/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused
+2025-04-24 12:30:51,672 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 12:30:51,673 [ERROR] Attempt 1/3 failed to create Cassandra schema: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 12:30:51,673 [INFO] Retrying in 5 seconds...
+2025-04-24 12:30:56,674 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 12:30:56,677 [WARNING] [control connection] Error connecting to 192.168.32.2:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/opt/bitnami/python/lib/python3.12/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused
+2025-04-24 12:30:56,678 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 12:30:56,679 [ERROR] Attempt 2/3 failed to create Cassandra schema: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 12:30:56,679 [INFO] Retrying in 5 seconds...
+2025-04-24 12:31:01,680 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 12:31:01,682 [WARNING] [control connection] Error connecting to 192.168.32.2:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/opt/bitnami/python/lib/python3.12/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused
+2025-04-24 12:31:01,682 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 12:31:01,683 [ERROR] Attempt 3/3 failed to create Cassandra schema: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 12:31:01,683 [ERROR] Application failed: ('Unable to connect to any servers', {'192.168.32.2:9042': ConnectionRefusedError(111, "Tried connecting to [('192.168.32.2', 9042)]. Last error: Connection refused")})
+2025-04-24 14:38:14,702 [INFO] Loaded configuration from .env file
+2025-04-24 14:38:14,703 [INFO] Creating Cassandra schema
+2025-04-24 14:38:14,706 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 14:38:14,727 [WARNING] Downgrading core protocol version from 66 to 65 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 14:38:14,730 [WARNING] Downgrading core protocol version from 65 to 5 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 14:38:14,812 [INFO] Using datacenter 'DC1' for DCAwareRoundRobinPolicy (via host '192.168.32.2:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-04-24 14:38:14,881 [INFO] Connected to Cassandra cluster at cassandra:9042
+2025-04-24 14:38:14,941 [INFO] Keyspace 'crypto_namespace' is ready ===============
+2025-04-24 14:38:15,119 [INFO] Table 'trades' ready ===========================
+2025-04-24 14:38:15,269 [INFO] Index on timestamp created ===========================
+2025-04-24 14:38:15,332 [INFO] Cassandra session closed
+2025-04-24 14:38:15,332 [INFO] Cassandra schema setup completed
+2025-04-24 14:38:59,337 [INFO] Spark session initialized successfully
+2025-04-24 14:39:00,798 [INFO] Connected to Kafka topic: cryptocurrency
+2025-04-24 14:39:01,305 [INFO] Started console streaming query
+2025-04-24 14:39:03,558 [INFO] Started Cassandra streaming query
+2025-04-24 14:43:02,192 [INFO] Received shutdown signal, stopping streaming queries
+2025-04-24 14:43:02,194 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=5>
+2025-04-24 14:43:02,207 [INFO] Closing down clientserver connection
+2025-04-24 14:43:02,207 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=5>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-04-24 14:43:02,213 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/python/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/venv/src/pyspark.py", line 296, in signal_handler
+    if query.isActive:
+       ^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/sql/streaming/query.py", line 169, in isActive
+    return self._jsq.isActive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o115.isActive
+2025-04-24 14:43:02,219 [INFO] Closing down clientserver connection
+2025-04-24 14:43:02,220 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/python/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/venv/src/pyspark.py", line 296, in signal_handler
+    if query.isActive:
+       ^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/sql/streaming/query.py", line 169, in isActive
+    return self._jsq.isActive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o115.isActive
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-04-24 14:43:02,220 [INFO] Closing down clientserver connection
+2025-04-24 14:43:02,221 [ERROR] Application failed: An error occurred while calling o115.awaitTermination
+2025-04-24 14:43:02,245 [INFO] Stopped streaming query
+2025-04-24 14:43:02,249 [INFO] Stopped streaming query
+2025-04-24 14:43:02,389 [INFO] Spark session stopped
+2025-04-24 14:43:02,395 [INFO] Closing down clientserver connection
+2025-04-24 14:45:24,405 [INFO] Loaded configuration from .env file
+2025-04-24 14:45:24,405 [INFO] Creating Cassandra schema
+2025-04-24 14:45:24,409 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 14:45:24,413 [WARNING] Downgrading core protocol version from 66 to 65 for 192.168.32.3:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 14:45:24,416 [WARNING] Downgrading core protocol version from 65 to 5 for 192.168.32.3:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 14:45:24,428 [INFO] Using datacenter 'DC1' for DCAwareRoundRobinPolicy (via host '192.168.32.3:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-04-24 14:45:24,469 [INFO] Connected to Cassandra cluster at cassandra:9042
+2025-04-24 14:45:24,521 [INFO] Keyspace 'crypto_namespace' is ready ===============
+2025-04-24 14:45:24,735 [INFO] Table 'trades' ready ===========================
+2025-04-24 14:45:24,901 [INFO] Index on timestamp created ===========================
+2025-04-24 14:45:24,912 [INFO] Cassandra session closed
+2025-04-24 14:45:24,912 [INFO] Cassandra schema setup completed
+2025-04-24 14:45:59,165 [INFO] Spark session initialized successfully
+2025-04-24 14:46:00,463 [INFO] Connected to Kafka topic: cryptocurrency
+2025-04-24 14:46:00,898 [INFO] Started console streaming query
+2025-04-24 14:46:02,821 [INFO] Started Cassandra streaming query
+2025-04-24 15:13:04,771 [INFO] Received shutdown signal, stopping streaming queries
+2025-04-24 15:13:04,773 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=5>
+2025-04-24 15:13:04,778 [INFO] Closing down clientserver connection
+2025-04-24 15:13:04,778 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=5>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-04-24 15:13:04,780 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/python/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/venv/src/pyspark.py", line 296, in signal_handler
+    if query.isActive:
+       ^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/sql/streaming/query.py", line 169, in isActive
+    return self._jsq.isActive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o115.isActive
+2025-04-24 15:13:04,783 [INFO] Closing down clientserver connection
+2025-04-24 15:13:04,783 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/python/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/venv/src/pyspark.py", line 296, in signal_handler
+    if query.isActive:
+       ^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/sql/streaming/query.py", line 169, in isActive
+    return self._jsq.isActive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o115.isActive
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-04-24 15:13:04,784 [INFO] Closing down clientserver connection
+2025-04-24 15:13:04,784 [ERROR] Application failed: An error occurred while calling o115.awaitTermination
+2025-04-24 15:13:04,806 [INFO] Stopped streaming query
+2025-04-24 15:13:04,810 [INFO] Stopped streaming query
+2025-04-24 15:13:05,009 [INFO] Spark session stopped
+2025-04-24 15:13:05,009 [INFO] Closing down clientserver connection
+2025-04-24 15:14:51,318 [INFO] Loaded configuration from .env file
+2025-04-24 15:14:51,318 [INFO] Creating Cassandra schema
+2025-04-24 15:14:51,321 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['cassandra'], lbp = None)
+2025-04-24 15:14:51,342 [WARNING] Downgrading core protocol version from 66 to 65 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 15:14:51,345 [WARNING] Downgrading core protocol version from 65 to 5 for 192.168.32.2:9042. To avoid this, it is best practice to explicitly set Cluster(protocol_version) to the version supported by your cluster. http://datastax.github.io/python-driver/api/cassandra/cluster.html#cassandra.cluster.Cluster.protocol_version
+2025-04-24 15:14:51,406 [INFO] Using datacenter 'DC1' for DCAwareRoundRobinPolicy (via host '192.168.32.2:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-04-24 15:14:51,473 [INFO] Connected to Cassandra cluster at cassandra:9042
+2025-04-24 15:14:51,523 [INFO] Keyspace 'crypto_namespace' is ready ===============
+2025-04-24 15:14:51,702 [INFO] Table 'trades' ready ===========================
+2025-04-24 15:14:51,847 [INFO] Index on timestamp created ===========================
+2025-04-24 15:14:51,914 [INFO] Cassandra session closed
+2025-04-24 15:14:51,914 [INFO] Cassandra schema setup completed
+2025-04-24 15:15:18,707 [INFO] Spark session initialized successfully
+2025-04-24 15:15:19,853 [INFO] Connected to Kafka topic: cryptocurrency
+2025-04-24 15:15:20,269 [INFO] Started console streaming query
+2025-04-24 15:15:22,878 [INFO] Started Cassandra streaming query
+2025-04-24 15:21:50,590 [INFO] Received shutdown signal, stopping streaming queries
+2025-04-24 15:21:50,591 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=5>
+2025-04-24 15:21:50,595 [INFO] Closing down clientserver connection
+2025-04-24 15:21:50,595 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: reentrant call inside <_io.BufferedReader name=5>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-04-24 15:21:50,597 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/python/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/venv/src/pyspark.py", line 296, in signal_handler
+    if query.isActive:
+       ^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/sql/streaming/query.py", line 169, in isActive
+    return self._jsq.isActive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o115.isActive
+2025-04-24 15:21:50,599 [INFO] Closing down clientserver connection
+2025-04-24 15:21:50,599 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/python/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/venv/src/pyspark.py", line 296, in signal_handler
+    if query.isActive:
+       ^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/sql/streaming/query.py", line 169, in isActive
+    return self._jsq.isActive()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o115.isActive
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/bitnami/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-04-24 15:21:50,600 [INFO] Closing down clientserver connection
+2025-04-24 15:21:50,600 [ERROR] Application failed: An error occurred while calling o115.awaitTermination
+2025-04-24 15:21:50,616 [INFO] Stopped streaming query
+2025-04-24 15:21:50,620 [INFO] Stopped streaming query
+2025-04-24 15:21:50,946 [INFO] Spark session stopped
+2025-04-24 15:21:50,948 [INFO] Closing down clientserver connection

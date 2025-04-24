@@ -17,6 +17,7 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     volumes:
       - ./src/extractor/connector.py:/app/src/connector.py
+    restart: on-failure
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -78,19 +79,38 @@ services:
     ports:
       - "7077:7077"
       - "8080:8080"
+    user: "0:0"
     networks:
       - project_network
     depends_on:
-      - kafka
-      - cassandra
+      kafka:
+        condition: service_healthy
+      cassandra:
+        condition: service_healthy
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+      - SPARK_MASTER_OPTS=-Dspark.deploy.defaultCores=1
+      - SPARK_DAEMON_MEMORY=2G
+    volumes:
+      - ./src/consumerr/:/opt/bitnami/spark/venv/src/
 
+    command: |
+      bash -c "
+        mkdir -p /opt/bitnami/spark/venv/src/checkpoint 
+        pip install --no-cache-dir -r /opt/bitnami/spark/venv/src/requirements.txt
+        /opt/bitnami/spark/sbin/start-master.sh
 
+        # Wait for master to be up
+        echo 'Waiting for Spark master to be ready...'
+        sleep 30
+
+        # Keep container running
+        tail -f /opt/bitnami/spark/logs/spark-*-org.apache.spark.deploy.master.Master-*.out
+      "
 
   spark-worker-1:
     image: bitnami/spark:3.5
@@ -100,14 +120,23 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2g
-      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=1
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+      - SPARK_WORKER_OPTS=-Dspark.worker.cleanup.enabled=true -Dspark.worker.cleanup.interval=3600
+    volumes:
+      - spark_worker1_logs:/opt/bitnami/spark/logs
+      - spark_worker1_work:/opt/bitnami/spark/work
     depends_on:
       - spark-master
+    healthcheck:
+      test: ps aux | grep "[o]rg.apache.spark.deploy.worker.Worker" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   spark-worker-2:
     image: bitnami/spark:3.5
@@ -117,67 +146,66 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2g
-      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=1
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+      - SPARK_WORKER_OPTS=-Dspark.worker.cleanup.enabled=true -Dspark.worker.cleanup.interval=3600
+    volumes:
+      - spark_worker2_logs:/opt/bitnami/spark/logs
+      - spark_worker2_work:/opt/bitnami/spark/work
     depends_on:
       - spark-master
-
-  spark-worker-3:
-    image: bitnami/spark:3.5
-    container_name: spark-worker-3
-    networks:
-      - project_network
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2g
-      - SPARK_WORKER_CORES=2
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
-
-    depends_on:
-      - spark-master
-
-  spark-worker-4:
-    image: bitnami/spark:3.5
-    container_name: spark-worker-4
-    networks:
-      - project_network
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2g
-      - SPARK_WORKER_CORES=2
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
-    depends_on:
-      - spark-master
+    healthcheck:
+      test: ps aux | grep "[o]rg.apache.spark.deploy.worker.Worker" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   cassandra:
     image: cassandra:latest
     container_name: cassandra
+    hostname: cassandra
     ports:
-      - "9042:9042"  # CQL port
-      - "7009:7009"  # Internode communication (within cluster)
+      - "7006:7006"
+      - "9042:9042"
     environment:
-      - CASSANDRA_CLUSTER_NAME=Cluster
+      - CASSANDRA_CLUSTER_NAME=CryptoCluster
+      - CASSANDRA_DC=DC1
+      - CASSANDRA_RACK=Rack1
+      - CASSANDRA_NUM_TOKENS=256
+      - CASSANDRA_LISTEN_ADDRESS=auto
+      - CASSANDRA_BROADCAST_ADDRESS=cassandra
+      - CASSANDRA_BROADCAST_RPC_ADDRESS=cassandra
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
     volumes:
-      - ./cassandra:/var/lib/cassandra
+      - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     networks:
       - project_network
 
 volumes:
-    cassandra_data:
-      driver: local
+  cassandra_data:
+    driver: local
+  spark_logs:
+    driver: local
+  spark_work:
+    driver: local
+  spark_worker1_logs:
+    driver: local
+  spark_worker1_work:
+    driver: local
+  spark_worker2_logs:
+    driver: local
+  spark_worker2_work:
+    driver: local
 
 networks:
   project_network:

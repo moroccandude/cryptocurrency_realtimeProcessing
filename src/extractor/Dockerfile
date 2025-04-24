@@ -8,4 +8,4 @@ COPY requirements.txt .
 COPY .env ./src/.env
 RUN pip install -r requirements.txt
 
-CMD ["python3", "./src/connector.py"]
+CMD ["python3", "src/connector.py"]
