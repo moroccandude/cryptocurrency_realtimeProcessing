@@ -2,3 +2,4 @@ websocket-client
 dotenv
 findspark
 confluent-kafka
+cassandra-driver
