@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fetcher
+  namespace: crypto-processing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fetcher
+  template:
+    metadata:
+      labels:
+        app: fetcher
+    spec:
+      containers:
+        - name: fetcher
+          image: ${YOUR_REGISTRY}/fetcher:latest # Replace with your image
+          ports:
+            - containerPort: 7000
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka:9092"
+          volumeMounts:
+            - name: connector-config
+              mountPath: /app/src/connector.py
+              subPath: connector.py
+      volumes:
+        - name: connector-config
+          configMap:
+            name: fetcher-connector-config

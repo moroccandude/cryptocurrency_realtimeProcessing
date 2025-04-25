@@ -1,4 +1,0 @@
-websocket-client
-dotenv
-findspark
-confluent-kafka

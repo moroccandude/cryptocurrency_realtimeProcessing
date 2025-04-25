@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spark-src-files
+  namespace: crypto-processing
+data:
+  requirements.txt: |
+    # Your requirements.txt content goes here
+    # Add all packages needed by your Spark application
+
+  # Include any other source files you need
+  # example_file.py: |
+  #   # content of the file

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+  namespace: crypto-processing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark-master
+  template:
+    metadata:
+      labels:
+        app: spark-master
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: spark-master
+          image: bitnami/spark:3.5
+          ports:
+            - containerPort: 7077
+              name: master
+            - containerPort: 8080
+              name: webui
+          env:
+            - name: SPARK_MODE
+              value: "master"
+            - name: SPARK_RPC_AUTHENTICATION_ENABLED
+              value: "no"
+            - name: SPARK_RPC_ENCRYPTION_ENABLED
+              value: "no"
+            - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
+              value: "no"
+            - name: SPARK_SSL_ENABLED
+              value: "no"
+            - name: SPARK_MASTER_OPTS
+              value: "-Dspark.deploy.defaultCores=1"
+            - name: SPARK_DAEMON_MEMORY
+              value: "2G"
+          volumeMounts:
+            - name: spark-src
+              mountPath: /opt/bitnami/spark/venv/src
+            - name: spark-checkpoint
+              mountPath: /opt/bitnami/spark/venv/src/checkpoint
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              mkdir -p /opt/bitnami/spark/venv/src/checkpoint 
+              pip install --no-cache-dir -r /opt/bitnami/spark/venv/src/requirements.txt
+              /opt/bitnami/spark/sbin/start-master.sh
+              tail -f /opt/bitnami/spark/logs/spark-*-org.apache.spark.deploy.master.Master-*.out
+      volumes:
+        - name: spark-src
+          configMap:
+            name: spark-src-files
+        - name: spark-checkpoint
+          emptyDir: {}
